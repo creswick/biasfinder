@@ -4,6 +4,8 @@ public enum Command {
     Exit,
     NullOp,
     Nearest,
-    sum,
+    Manipulate,
+    Sim,
+    Debug,
     ;
 }
