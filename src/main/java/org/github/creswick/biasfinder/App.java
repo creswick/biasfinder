@@ -24,7 +24,7 @@ public class App {
     private static Logger log = LoggerFactory.getLogger(App.class);
     private final WordVectors vec;
     private final Console console;
-    private boolean mDebug;
+    private boolean mDebug = true;
 
     public App(final WordVectors vec) {
         this.vec = vec;
@@ -47,6 +47,10 @@ public class App {
         while (cmd != Command.Exit) {
             try {
                 final String input = console.readLine("> ");
+                if (input.trim().length() == 0) {
+                    // skip empty input:
+                    continue;
+                }
                 int space_idx = input.indexOf(" ");
                 if (space_idx == -1) {
                     space_idx = input.length();
@@ -101,7 +105,7 @@ public class App {
 
     private void debug(final String string) {
         if (mDebug) {
-            console.println("[DEBUG]"+ string);
+            console.println("[DEBUG] "+ string);
         }
     }
 
@@ -123,8 +127,10 @@ public class App {
         final int splitIdx = cmdArgs.indexOf("-");
 
         final List<String> positive = cmdArgs.subList(0, splitIdx);
-        final List<String> negative = cmdArgs.subList(splitIdx, cmdArgs.size());
+        final List<String> negative = cmdArgs.subList(splitIdx + 1, cmdArgs.size());
 
+        debug("positive: "+ joiner.join(positive));
+        debug("negative: "+ joiner.join(negative));
         final Collection<String> near = vec.wordsNearest(positive, negative, 10);
         console.println(joiner.join(near));
     }
